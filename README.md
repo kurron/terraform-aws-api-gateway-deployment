@@ -1,5 +1,6 @@
 # Overview
-This Terraform module creates an HTTP proxy binding to an API Gateway.
+This Terraform module creates an HTTP proxy integration and deployment,
+binding it to an established API Gateway.
 
 # Prerequisites
 * [Terraform](https://terraform.io/) installed and working

@@ -12,20 +12,30 @@ data "terraform_remote_state" "api_gateway" {
     }
 }
 
-module "api_gateway_binding" {
+data "terraform_remote_state" "api_gateway_binding" {
+    backend = "s3"
+    config {
+        bucket = "transparent-test-terraform-state"
+        key    = "us-west-2/debug/aplication-services/api-gateway-binding/terraform.tfstate"
+        region = "us-east-1"
+    }
+}
+
+module "api_gateway_deployment" {
     source = "../"
 
-    region                       = "us-west-2"
-    api_gateway_id               = "${data.terraform_remote_state.api_gateway.api_gateway_id}"
-    api_gateway_root_resource_id = "${data.terraform_remote_state.api_gateway.api_gateway_root_resource_id}"
-    api_root_path                = "api"
-    api_key_required             = "false"
-    target_url                   = "http://httpbin.org"
-    stage_name                   = "development"
-    stage_description            = "APIs still under development"
-    deployment_description       = "Initial cut of the API"
+    region                    = "us-west-2"
+    api_gateway_id            = "${data.terraform_remote_state.api_gateway.api_gateway_id}"
+    parent_resource_id        = "${data.terraform_remote_state.api_gateway_binding.parent_resource_id}"
+    parent_method_http_method = "${data.terraform_remote_state.api_gateway_binding.parent_method_http_method}"
+    target_url                = "http://httpbin.org"
+    child_resource_id         = "${data.terraform_remote_state.api_gateway_binding.child_resource_id}"
+    child_method_http_method  = "${data.terraform_remote_state.api_gateway_binding.child_method_http_method}"
+    stage_name                = "development"
+    stage_description         = "APIs still under development"
+    deployment_description    = "Initial cut of the API"
 }
 
 output "deployment_stage_name" {
-    value = "${module.api_gateway_binding.deployment_stage_name}"
+    value = "${module.api_gateway_deployment.deployment_stage_name}"
 }

@@ -8,24 +8,29 @@ variable "api_gateway_id" {
     description = "ID of the API Gateway, e.g. f6wayvdtd1"
 }
 
-variable "api_gateway_root_resource_id" {
+variable "parent_resource_id" {
     type = "string"
-    description = "ID of the API Gateway's root resource, e.g. rx3pwr22hf"
+    description = "ID of the root resource, e.g. rx3pwr22hf"
 }
 
-variable "api_root_path" {
+variable "parent_method_http_method" {
     type = "string"
-    description = "Base path of the API, e.g. api"
-}
-
-variable "api_key_required" {
-    type = "string"
-    description = "If true, then an API key must be sent with each request, e.g. true"
+    description = "The parent method's HTTP method, e.g. GET."
 }
 
 variable "target_url" {
     type = "string"
     description = "URL to proxy requests to, e.g. http://httpbin.org"
+}
+
+variable "child_resource_id" {
+    type = "string"
+    description = "The child resource's identifier, e.g. rx3pwr22hf"
+}
+
+variable "child_method_http_method" {
+    type = "string"
+    description = "The child method's HTTP method, e.g. GET."
 }
 
 variable "stage_name" {

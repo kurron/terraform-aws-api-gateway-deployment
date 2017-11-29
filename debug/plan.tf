@@ -34,6 +34,11 @@ module "api_gateway_deployment" {
     stage_name                = "development"
     stage_description         = "APIs still under development"
     deployment_description    = "Initial cut of the API"
+    metrics_enabled           = "true"
+    logging_level             = "INFO"
+    data_trace_enabled        = "true"
+    throttling_burst_limit    = "300"
+    throttling_rate_limit     = "30"
 }
 
 output "deployment_stage_name" {

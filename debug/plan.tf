@@ -40,7 +40,7 @@ module "api_gateway_deployment" {
     throttling_burst_limit    = "300"
     throttling_rate_limit     = "30"
     domain_name               = "${data.terraform_remote_state.api_gateway.domain_name}"
-    base_path                 = "alpha"
+    base_path                 = "development"
 }
 
 output "deployment_stage_name" {

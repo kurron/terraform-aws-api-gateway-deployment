@@ -65,6 +65,6 @@ resource "aws_api_gateway_base_path_mapping" "mapping" {
     depends_on  = ["aws_api_gateway_deployment.deployment"]
     domain_name = "${var.domain_name}"
     api_id      = "${var.api_gateway_id}"
-#   stage_name  = "${var.stage_name}"
+    stage_name  = "${var.stage_name}"
     base_path   = "${var.base_path}"
 }

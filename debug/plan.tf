@@ -1,5 +1,5 @@
 terraform {
-    required_version = ">= 0.10.7"
+    required_version = ">= 0.11"
     backend "s3" {}
 }
 
@@ -31,14 +31,16 @@ module "api_gateway_deployment" {
     target_url                = "http://httpbin.org"
     child_resource_id         = "${data.terraform_remote_state.api_gateway_binding.child_resource_id}"
     child_method_http_method  = "${data.terraform_remote_state.api_gateway_binding.child_method_http_method}"
-    stage_name                = "development"
-    stage_description         = "APIs still under development"
-    deployment_description    = "Initial cut of the API"
+    stage_name                = "released"
+    stage_description         = "Official API version"
+    deployment_description    = "Binding of the resources to the proxied service."
     metrics_enabled           = "true"
     logging_level             = "INFO"
     data_trace_enabled        = "true"
     throttling_burst_limit    = "300"
     throttling_rate_limit     = "30"
+    domain_name               = "${data.terraform_remote_state.api_gateway.domain_name}"
+    base_path                 = "alpha"
 }
 
 output "deployment_stage_name" {

@@ -1,5 +1,5 @@
 terraform {
-    required_version = ">= 0.10.7"
+    required_version = ">= 0.11"
     backend "s3" {}
 }
 
@@ -47,6 +47,7 @@ resource "aws_api_gateway_deployment" "deployment" {
 }
 
 resource "aws_api_gateway_method_settings" "settings" {
+    depends_on   = ["aws_api_gateway_deployment.deployment"]
     rest_api_id  = "${var.api_gateway_id}"
     stage_name   = "${var.stage_name}"
     method_path  = "*/*"
@@ -58,4 +59,12 @@ resource "aws_api_gateway_method_settings" "settings" {
         throttling_rate_limit  = "${var.throttling_rate_limit}"
         caching_enabled        = "false"
     }
+}
+
+resource "aws_api_gateway_base_path_mapping" "mapping" {
+    depends_on  = ["aws_api_gateway_deployment.deployment"]
+    domain_name = "${var.domain_name}"
+    api_id      = "${var.api_gateway_id}"
+    stage_name  = "${var.stage_name}"
+    base_path   = "${var.base_path}"
 }

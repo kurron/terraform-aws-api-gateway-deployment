@@ -31,7 +31,7 @@ module "api_gateway_deployment" {
     target_url                = "http://httpbin.org"
     child_resource_id         = "${data.terraform_remote_state.api_gateway_binding.child_resource_id}"
     child_method_http_method  = "${data.terraform_remote_state.api_gateway_binding.child_method_http_method}"
-    stage_name                = "released"
+    stage_name                = "development"
     stage_description         = "Official API version"
     deployment_description    = "Binding of the resources to the proxied service."
     metrics_enabled           = "true"

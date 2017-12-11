@@ -72,13 +72,3 @@ variable "throttling_rate_limit" {
     type = "string"
     description = "Specifies the throttling rate limit."
 }
-
-variable "domain_name" {
-    type = "string"
-    description = "Domain name used when establishing the API Gateway, e.g. debug.transparent.engineering"
-}
-
-variable "base_path" {
-    type = "string"
-    description = "Path segment that must be prepended to the path when accessing the API via this mapping, e.g. /development"
-}

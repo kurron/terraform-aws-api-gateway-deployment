@@ -3,6 +3,15 @@ terraform {
     backend "s3" {}
 }
 
+variable "region" {
+    type = "string"
+    default = "us-west-2"
+}
+
+provider "aws" {
+    region = "${var.region}"
+}
+
 data "terraform_remote_state" "api_gateway" {
     backend = "s3"
     config {
@@ -24,7 +33,7 @@ data "terraform_remote_state" "api_gateway_binding" {
 module "api_gateway_deployment" {
     source = "../"
 
-    region                    = "us-west-2"
+    region                    = "${var.region}"
     api_gateway_id            = "${data.terraform_remote_state.api_gateway.api_gateway_id}"
     parent_resource_id        = "${data.terraform_remote_state.api_gateway_binding.parent_resource_id}"
     parent_method_http_method = "${data.terraform_remote_state.api_gateway_binding.parent_method_http_method}"
@@ -39,8 +48,14 @@ module "api_gateway_deployment" {
     data_trace_enabled        = "true"
     throttling_burst_limit    = "300"
     throttling_rate_limit     = "30"
-    domain_name               = "${data.terraform_remote_state.api_gateway.domain_name}"
-    base_path                 = "development"
+}
+
+resource "aws_api_gateway_base_path_mapping" "mapping" {
+    depends_on  = ["module.api_gateway_deployment"]
+    domain_name = "${data.terraform_remote_state.api_gateway.domain_name}"
+    api_id      = "${data.terraform_remote_state.api_gateway.api_gateway_id}"
+    stage_name  = "development"
+    base_path   = "development"
 }
 
 output "deployment_stage_name" {
